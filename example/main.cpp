@@ -8,10 +8,10 @@ extern "C" void app_main()
     ESP_ERROR_CHECK(status_led_create(GPIO_NUM_22, 0, &handle));
 
     // Set manual state
-    ESP_ERROR_CHECK(status_led_stop(handle, true));
+    ESP_ERROR_CHECK(status_led_set_state(handle, true));
     vTaskDelay(1000 / portTICK_PERIOD_MS);
 
-    ESP_ERROR_CHECK(status_led_stop(handle, false));
+    ESP_ERROR_CHECK(status_led_set_state(handle, false));
     vTaskDelay(1000 / portTICK_PERIOD_MS);
 
     // Blinking
@@ -22,5 +22,5 @@ extern "C" void app_main()
     vTaskDelay(2000 / portTICK_PERIOD_MS);
 
     // Done
-    ESP_ERROR_CHECK(status_led_stop(handle, false));
+    ESP_ERROR_CHECK(status_led_set_state(handle, false));
 }
