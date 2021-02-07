@@ -1,5 +1,5 @@
-# esp-lib-template
+# esp-status-led
 
-![platformio build](https://github.com/mdvorak-iot/esp-lib-template/workflows/platformio%20build/badge.svg)
+![platformio build](https://github.com/mdvorak-iot/esp-status-led/workflows/platformio%20build/badge.svg)
 
 TODO Description
