@@ -38,6 +38,8 @@ static void status_led_timer_stop(void *arg)
     status_led_handle_t handle = (status_led_handle_t)arg;
     assert(handle);
 
+    ESP_LOGD(TAG, "timeout on pin %d", handle->pin);
+
     // Ignore error if timer is already stopped
     esp_err_t err = esp_timer_stop(handle->timer);
     if (err != ESP_ERR_INVALID_STATE)
@@ -179,7 +181,7 @@ esp_err_t status_led_set_interval_for(status_led_handle_t handle, uint32_t inter
             return err;
         }
 
-        ESP_LOGI(TAG, "set timeout %d on pin %d ms into state %s", timeout_ms, handle->pin, final_state ? "on" : "off");
+        ESP_LOGD(TAG, "set timeout %d on pin %d ms into state %s", timeout_ms, handle->pin, final_state ? "on" : "off");
     }
 
     // If requested, restart timer
@@ -194,7 +196,7 @@ esp_err_t status_led_set_interval_for(status_led_handle_t handle, uint32_t inter
     }
 
     // Success
-    ESP_LOGI(TAG, "set interval %d ms on pin %d with state %s", interval_ms, handle->pin, initial_state ? "on" : "off");
+    ESP_LOGD(TAG, "set interval %d ms on pin %d with state %s", interval_ms, handle->pin, initial_state ? "on" : "off");
     return ESP_OK;
 }
 
