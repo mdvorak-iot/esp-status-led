@@ -1,25 +1,26 @@
-#include <esp_log.h>
+#include <status_led.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
-static const char TAG[] = "example";
-
-void setup()
+extern "C" void app_main()
 {
-	// Setup complete
-	ESP_LOGI(TAG, "started");
-}
+    status_led_handle_t handle;
+    ESP_ERROR_CHECK(status_led_create(GPIO_NUM_22, 0, &handle));
 
-void loop()
-{
-	vTaskDelay(1000 / portTICK_PERIOD_MS);
-}
+    // Set manual state
+    ESP_ERROR_CHECK(status_led_stop(handle, true));
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
 
-extern "C" _Noreturn void app_main()
-{
-	setup();
-	for (;;)
-	{
-		loop();
-	}
+    ESP_ERROR_CHECK(status_led_stop(handle, false));
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+    // Blinking
+    ESP_ERROR_CHECK(status_led_set_interval(handle, 200, true));
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
+
+    ESP_ERROR_CHECK(status_led_set_interval(handle, 40, true));
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
+
+    // Done
+    ESP_ERROR_CHECK(status_led_stop(handle, false));
 }
