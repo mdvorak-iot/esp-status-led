@@ -1,16 +1,16 @@
 menu "Status LED"
-    config DEFAULT_STATUS_LED_ENABLE
+    config STATUS_LED_DEFAULT_ENABLE
         bool "Enable default status LED object"
         help
-            Makes DEFAULT_STATUS_LED object available, but it still needs to be created via status_led_create_default().                
+            Makes STATUS_LED_DEFAULT object available, but it still needs to be created via status_led_create_default().                
 
-    config DEFAULT_STATUS_LED_GPIO
+    config STATUS_LED_DEFAULT_GPIO
         int "Status LED GPIO"
         default 0
         help
             GPIO PIN status LED is connected to.
 
-    config DEFAULT_STATUS_LED_ON
+    config STATUS_LED_DEFAULT_ON
         int "Status LED ON logic level"
         default 1
         help
