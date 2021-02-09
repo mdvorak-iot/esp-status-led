@@ -99,6 +99,9 @@ esp_err_t status_led_create(gpio_num_t pin, uint32_t on_state, status_led_handle
         .arg = result,
         .dispatch_method = ESP_TIMER_TASK,
         .name = "status_led",
+#if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(4, 4, 0) // NOT not released yet
+        .skip_unhandled_events = true,
+#endif
     };
 
     // GPIO config
