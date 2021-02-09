@@ -1,4 +1,4 @@
-name: "esp-status-led"
+name: "status_led"
 description: TODO
 url: https://github.com/mdvorak-iot/esp-status-led.git
 targets:
