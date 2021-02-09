@@ -1,7 +1,18 @@
 menu "Status LED"
-    config DOUBLE_RESET_DEFAULT_TIMEOUT
-        int "Default double reset detecion timeout"
-        default 3000
+    config DEFAULT_STATUS_LED_ENABLE
+        bool "Enable default status LED object"
         help
-            Timeout, in milliseconds.
+            Makes DEFAULT_STATUS_LED object available, but it still needs to be created via status_led_create_default().                
+
+    config DEFAULT_STATUS_LED_GPIO
+        int "Status LED GPIO"
+        default 0
+        help
+            GPIO PIN status LED is connected to.
+
+    config DEFAULT_STATUS_LED_ON
+        int "Status LED ON logic level"
+        default 1
+        help
+            GPIO logic leven, when status LED is powerd on - 1 when HIGH corresponds to an ON state, 0 when LOW corresponds to an ON state.
 endmenu

@@ -4,6 +4,14 @@
 #include <esp_err.h>
 #include <driver/gpio.h>
 
+#ifndef DEFAULT_STATUS_LED_GPIO
+#define DEFAULT_STATUS_LED_GPIO CONFIG_DEFAULT_STATUS_LED_GPIO
+#endif
+
+#ifndef DEFAULT_STATUS_LED_ON
+#define DEFAULT_STATUS_LED_ON CONFIG_DEFAULT_STATUS_LED_ON
+#endif
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -28,6 +36,13 @@ extern "C"
     }
 
     esp_err_t status_led_toggle_state(status_led_handle_t handle);
+
+#if CONFIG_DEFAULT_STATUS_LED_ENABLE
+
+    extern status_led_handle_t DEFAULT_STATUS_LED;
+
+    esp_err_t status_led_create_default();
+#endif
 
 #ifdef __cplusplus
 }
