@@ -42,6 +42,7 @@ extern "C"
     extern status_led_handle_t STATUS_LED_DEFAULT;
 
     esp_err_t status_led_create_default();
+    
 #endif
 
 #ifdef __cplusplus

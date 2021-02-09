@@ -7,6 +7,8 @@
 
 static const char TAG[] = "status_led";
 
+static portMUX_TYPE lock = portMUX_INITIALIZER_UNLOCKED;
+
 struct status_led_handle
 {
     gpio_num_t pin;
@@ -146,11 +148,16 @@ esp_err_t status_led_set_interval_for(status_led_handle_t handle, uint32_t inter
         return ESP_ERR_INVALID_ARG;
     }
 
+    // Lock
+    // NOTE set err and use goto exit; instead of return
+    portENTER_CRITICAL_SAFE(&lock);
+    esp_err_t err;
+
     // Stop current
-    esp_err_t err = esp_timer_stop(handle->timer);
+    err = esp_timer_stop(handle->timer);
     if (err != ESP_OK && err != ESP_ERR_INVALID_STATE)
     {
-        return err;
+        goto exit;
     }
     // Cancel timeout as well
     if (handle->stop_timer)
@@ -158,7 +165,7 @@ esp_err_t status_led_set_interval_for(status_led_handle_t handle, uint32_t inter
         esp_err_t err = esp_timer_stop(handle->stop_timer);
         if (err != ESP_OK && err != ESP_ERR_INVALID_STATE)
         {
-            return err;
+            goto exit;
         }
     }
 
@@ -174,14 +181,14 @@ esp_err_t status_led_set_interval_for(status_led_handle_t handle, uint32_t inter
         err = status_led_init_stop_timer(handle);
         if (err != ESP_OK)
         {
-            return err;
+            goto exit;
         }
 
         // Schedule stop
         err = esp_timer_start_once(handle->stop_timer, timeout_ms * 1000);
         if (err != ESP_OK)
         {
-            return err;
+            goto exit;
         }
 
         ESP_LOGD(TAG, "set timeout %d on pin %d ms into state %s", timeout_ms, handle->pin, final_state ? "on" : "off");
@@ -194,13 +201,17 @@ esp_err_t status_led_set_interval_for(status_led_handle_t handle, uint32_t inter
         err = esp_timer_start_periodic(handle->timer, interval_ms * 1000 / 2); // period in us
         if (err != ESP_OK)
         {
-            return err;
+            goto exit;
         }
     }
 
     // Success
     ESP_LOGD(TAG, "set interval %d ms on pin %d with state %s", interval_ms, handle->pin, initial_state ? "on" : "off");
-    return ESP_OK;
+    err = ESP_OK;
+
+exit:
+    portEXIT_CRITICAL_SAFE(&lock);
+    return err;
 }
 
 esp_err_t status_led_delete(status_led_handle_t handle)
