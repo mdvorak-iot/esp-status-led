@@ -4,4 +4,4 @@ cmake_minimum_required(VERSION 3.11.0)
 list(APPEND EXTRA_COMPONENT_DIRS " ${CMAKE_SOURCE_DIR}/..")
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-project(esp-double-reset)
+project(esp-status-led)
