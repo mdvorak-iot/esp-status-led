@@ -108,35 +108,36 @@ esp_err_t status_led_create(gpio_num_t pin, uint32_t on_state, status_led_handle
     esp_err_t err = gpio_reset_pin(pin);
     if (err != ESP_OK)
     {
-        status_led_delete(result);
-        return err;
+        goto error;
     }
 
     err = gpio_set_direction(pin, GPIO_MODE_OUTPUT);
     if (err != ESP_OK)
     {
-        status_led_delete(result);
-        return err;
+        goto error;
     }
 
     err = gpio_set_level(pin, result->off_state);
     if (err != ESP_OK)
     {
-        status_led_delete(result);
-        return err;
+        goto error;
     }
 
     err = esp_timer_create(&args, &result->timer);
     if (err != ESP_OK)
     {
-        status_led_delete(result);
-        return err;
+        goto error;
     }
 
     // Success
     *out_handle = result;
     ESP_LOGI(TAG, "initialized on pin %d", pin);
     return ESP_OK;
+
+error:
+    // Release memory and return error
+    status_led_delete(result);
+    return err;
 }
 
 esp_err_t status_led_set_interval_for(status_led_handle_t handle, uint32_t interval_ms, bool initial_state, uint32_t timeout_ms, bool final_state)
