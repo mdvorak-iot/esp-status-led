@@ -87,7 +87,7 @@ esp_err_t status_led_create(gpio_num_t pin, uint32_t on_state, status_led_handle
     // Configure
     result->pin = pin;
     result->on_state = on_state;
-    result->off_state = (~on_state) & 1;
+    result->off_state = on_state ? 0 : 1;
     result->timer = NULL;
     result->stop_timer = NULL;
     result->status = false;
