@@ -73,7 +73,7 @@ static esp_err_t status_led_init_stop_timer(status_led_handle_t handle)
 
 esp_err_t status_led_create(gpio_num_t pin, uint32_t on_state, status_led_handle_t *out_handle)
 {
-    if (out_handle == NULL)
+    if (out_handle == NULL || pin < 0 || !GPIO_IS_VALID_OUTPUT_GPIO(pin))
     {
         return ESP_ERR_INVALID_ARG;
     }
