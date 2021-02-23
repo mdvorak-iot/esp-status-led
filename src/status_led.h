@@ -36,6 +36,9 @@ inline esp_err_t status_led_set_state(status_led_handle_t handle, bool state)
 
 esp_err_t status_led_toggle_state(status_led_handle_t handle);
 
+bool status_led_is_active(status_led_handle_t handle);
+
+// Default handle
 #if CONFIG_STATUS_LED_DEFAULT_ENABLE
 
 extern status_led_handle_t STATUS_LED_DEFAULT;

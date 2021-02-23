@@ -15,6 +15,7 @@ struct status_led_handle
     uint32_t off_state;
     esp_timer_handle_t timer;
     esp_timer_handle_t stop_timer;
+    bool active;
     bool status;
     bool stop_status;
 };
@@ -45,12 +46,13 @@ static void status_led_timer_stop(void *arg)
     esp_err_t err = esp_timer_stop(handle->timer);
     if (err != ESP_ERR_INVALID_STATE)
     {
-        ESP_ERROR_CHECK_WITHOUT_ABORT(err);
+        ESP_LOGE(TAG, "failed to stop timeout timer: %d", err);
     }
 
     // Set final status
     handle->status = handle->stop_status;
     status_led_set_level(handle);
+    handle->active = false;
 }
 
 static esp_err_t status_led_init_stop_timer(status_led_handle_t handle)
@@ -149,6 +151,7 @@ esp_err_t status_led_set_interval_for(status_led_handle_t handle, uint32_t inter
     // NOTE set err and use goto exit; instead of return
     portENTER_CRITICAL_SAFE(&lock);
     esp_err_t err;
+    bool active = false;
 
     // Stop current
     err = esp_timer_stop(handle->timer);
@@ -188,6 +191,7 @@ esp_err_t status_led_set_interval_for(status_led_handle_t handle, uint32_t inter
             goto exit;
         }
 
+        active = true;
         ESP_LOGD(TAG, "set timeout %d on pin %d ms into state %s", timeout_ms, handle->pin, final_state ? "on" : "off");
     }
 
@@ -200,6 +204,8 @@ esp_err_t status_led_set_interval_for(status_led_handle_t handle, uint32_t inter
         {
             goto exit;
         }
+
+        active = true;
     }
 
     // Success
@@ -207,6 +213,7 @@ esp_err_t status_led_set_interval_for(status_led_handle_t handle, uint32_t inter
     err = ESP_OK;
 
 exit:
+    handle->active = active;
     portEXIT_CRITICAL_SAFE(&lock);
     return err;
 }
@@ -264,4 +271,9 @@ esp_err_t status_led_delete(status_led_handle_t handle)
 esp_err_t status_led_toggle_state(status_led_handle_t handle)
 {
     return status_led_set_state(handle, !handle->status);
+}
+
+bool status_led_is_active(status_led_handle_t handle)
+{
+    return handle && handle->active;
 }
