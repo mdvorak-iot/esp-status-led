@@ -192,7 +192,6 @@ esp_err_t status_led_set_interval_for(status_led_handle_t handle, uint32_t inter
         }
 
         active = true;
-        ESP_LOGD(TAG, "set timeout %d on pin %d ms into state %s", timeout_ms, handle->pin, final_state ? "on" : "off");
     }
 
     // If requested, restart timer
@@ -209,12 +208,20 @@ esp_err_t status_led_set_interval_for(status_led_handle_t handle, uint32_t inter
     }
 
     // Success
-    ESP_LOGD(TAG, "set interval %d ms on pin %d with state %s", interval_ms, handle->pin, initial_state ? "on" : "off");
     err = ESP_OK;
 
 exit:
     handle->active = active;
     portEXIT_CRITICAL_SAFE(&lock);
+
+    // NOTE logging must be outside critical section
+    if (err == ESP_OK)
+    {
+        ESP_LOGD(TAG, "set interval %d ms on pin %d with state %s", interval_ms, handle->pin, initial_state ? "on" : "off");
+        if (timeout_ms > 0)
+            ESP_LOGD(TAG, "set timeout %d on pin %d ms into state %s", timeout_ms, handle->pin, final_state ? "on" : "off");
+    }
+
     return err;
 }
 
