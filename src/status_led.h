@@ -1,5 +1,5 @@
-#ifndef STATUS_LED_H
-#define STATUS_LED_H
+#ifndef STATUS_LED_H_
+#define STATUS_LED_H_
 
 #include <driver/gpio.h>
 #include <esp_err.h>
