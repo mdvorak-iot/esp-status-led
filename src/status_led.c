@@ -161,7 +161,7 @@ esp_err_t status_led_set_interval_for(status_led_handle_t handle, uint32_t inter
     // Cancel timeout as well
     if (handle->stop_timer)
     {
-        esp_err_t err = esp_timer_stop(handle->stop_timer);
+        err = esp_timer_stop(handle->stop_timer);
         if (err != ESP_OK && err != ESP_ERR_INVALID_STATE)
         {
             goto exit;
