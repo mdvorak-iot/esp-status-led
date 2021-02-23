@@ -44,7 +44,7 @@ static void status_led_timer_stop(void *arg)
 
     // Ignore error if timer is already stopped
     esp_err_t err = esp_timer_stop(handle->timer);
-    if (err != ESP_ERR_INVALID_STATE)
+    if (err != ESP_OK && err != ESP_ERR_INVALID_STATE)
     {
         ESP_LOGE(TAG, "failed to stop timeout timer: %d", err);
     }
