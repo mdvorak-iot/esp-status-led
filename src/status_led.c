@@ -14,8 +14,8 @@ struct status_led_handle
     uint32_t off_state;
     esp_timer_handle_t timer;
     esp_timer_handle_t stop_timer;
-    volatile bool status;
-    volatile bool stop_status;
+    bool status;
+    bool stop_status;
 };
 
 inline static esp_err_t status_led_set_level(status_led_handle_t handle)
