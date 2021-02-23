@@ -2,6 +2,7 @@
 #include <esp_log.h>
 #include <esp_timer.h>
 #include <freertos/FreeRTOS.h>
+#include <string.h>
 
 static const char TAG[] = "status_led";
 
@@ -83,15 +84,12 @@ esp_err_t status_led_create(gpio_num_t pin, uint32_t on_state, status_led_handle
     {
         return ESP_ERR_NO_MEM;
     }
+    memset(result, 0, sizeof(*result));
 
     // Configure
     result->pin = pin;
     result->on_state = on_state;
     result->off_state = on_state ? 0 : 1;
-    result->timer = NULL;
-    result->stop_timer = NULL;
-    result->status = false;
-    result->stop_status = false;
 
     // Timer config
     esp_timer_create_args_t args = {
