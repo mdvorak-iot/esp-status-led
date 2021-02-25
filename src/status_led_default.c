@@ -2,7 +2,7 @@
 
 #if CONFIG_STATUS_LED_DEFAULT_ENABLE
 
-status_led_handle_t STATUS_LED_DEFAULT = NULL;
+status_led_handle_ptr STATUS_LED_DEFAULT = NULL;
 
 esp_err_t status_led_create_default()
 {

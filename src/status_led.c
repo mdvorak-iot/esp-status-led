@@ -20,14 +20,14 @@ struct status_led_handle
     bool stop_status;
 };
 
-inline static esp_err_t status_led_set_level(status_led_handle_t handle)
+inline static esp_err_t status_led_set_level(status_led_handle_ptr handle)
 {
     return gpio_set_level(handle->pin, handle->status ? handle->on_state : handle->off_state);
 }
 
 static void status_led_timer_callback(void *arg)
 {
-    status_led_handle_t handle = (status_led_handle_t)arg;
+    status_led_handle_ptr handle = (status_led_handle_ptr)arg;
     assert(handle);
 
     // Toggle status
@@ -37,7 +37,7 @@ static void status_led_timer_callback(void *arg)
 
 static void status_led_timer_stop(void *arg)
 {
-    status_led_handle_t handle = (status_led_handle_t)arg;
+    status_led_handle_ptr handle = (status_led_handle_ptr)arg;
     assert(handle);
 
     ESP_LOGD(TAG, "timeout on pin %d", handle->pin);
@@ -55,7 +55,7 @@ static void status_led_timer_stop(void *arg)
     handle->active = false;
 }
 
-static esp_err_t status_led_init_stop_timer(status_led_handle_t handle)
+static esp_err_t status_led_init_stop_timer(status_led_handle_ptr handle)
 {
     // Already present
     if (handle->stop_timer)
@@ -74,14 +74,14 @@ static esp_err_t status_led_init_stop_timer(status_led_handle_t handle)
     return esp_timer_create(&args, &handle->stop_timer);
 }
 
-esp_err_t status_led_create(gpio_num_t pin, uint32_t on_state, status_led_handle_t *out_handle)
+esp_err_t status_led_create(gpio_num_t pin, uint32_t on_state, status_led_handle_ptr *out_handle)
 {
     if (out_handle == NULL || pin < 0 || !GPIO_IS_VALID_OUTPUT_GPIO(pin))
     {
         return ESP_ERR_INVALID_ARG;
     }
 
-    status_led_handle_t result = (status_led_handle_t)malloc(sizeof(*result));
+    status_led_handle_ptr result = (status_led_handle_ptr)malloc(sizeof(*result));
     if (result == NULL)
     {
         return ESP_ERR_NO_MEM;
@@ -140,7 +140,7 @@ error:
     return err;
 }
 
-esp_err_t status_led_set_interval_for(status_led_handle_t handle, uint32_t interval_ms, bool initial_state, uint32_t timeout_ms, bool final_state)
+esp_err_t status_led_set_interval_for(status_led_handle_ptr handle, uint32_t interval_ms, bool initial_state, uint32_t timeout_ms, bool final_state)
 {
     if (handle == NULL)
     {
@@ -225,7 +225,7 @@ exit:
     return err;
 }
 
-esp_err_t status_led_delete(status_led_handle_t handle)
+esp_err_t status_led_delete(status_led_handle_ptr handle)
 {
     if (handle == NULL)
     {
@@ -275,22 +275,22 @@ esp_err_t status_led_delete(status_led_handle_t handle)
     return ESP_OK;
 }
 
-inline esp_err_t status_led_set_interval(status_led_handle_t handle, uint32_t interval_ms, bool initial_state)
+inline esp_err_t status_led_set_interval(status_led_handle_ptr handle, uint32_t interval_ms, bool initial_state)
 {
     return status_led_set_interval_for(handle, interval_ms, initial_state, 0, initial_state);
 }
 
-inline esp_err_t status_led_set_state(status_led_handle_t handle, bool state)
+inline esp_err_t status_led_set_state(status_led_handle_ptr handle, bool state)
 {
     return status_led_set_interval_for(handle, 0, state, 0, state);
 }
 
-esp_err_t status_led_toggle_state(status_led_handle_t handle)
+esp_err_t status_led_toggle_state(status_led_handle_ptr handle)
 {
     return status_led_set_state(handle, !handle->status);
 }
 
-bool status_led_is_active(status_led_handle_t handle)
+bool status_led_is_active(status_led_handle_ptr handle)
 {
     return handle && handle->active;
 }
