@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.11.0)
 
 idf_component_register(
-        SRC_DIRS src
-        INCLUDE_DIRS src
+        SRCS
+        src/status_led.c
+        src/status_led_default.c
+        INCLUDE_DIRS include
         REQUIRES freertos driver log
 )
