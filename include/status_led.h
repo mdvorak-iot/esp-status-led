@@ -1,8 +1,8 @@
-#ifndef STATUS_LED_H_
-#define STATUS_LED_H_
+#pragma once
 
 #include <driver/gpio.h>
 #include <esp_err.h>
+#include <stdbool.h>
 
 #ifndef STATUS_LED_DEFAULT_GPIO
 #define STATUS_LED_DEFAULT_GPIO CONFIG_STATUS_LED_DEFAULT_GPIO
@@ -43,6 +43,4 @@ esp_err_t status_led_create_default();
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif
