@@ -105,13 +105,14 @@ esp_err_t status_led_create(gpio_num_t pin, uint32_t on_state, status_led_handle
     };
 
     // GPIO config
-    esp_err_t err = gpio_reset_pin(pin);
-    if (err != ESP_OK)
-    {
-        goto error;
-    }
-
-    err = gpio_set_direction(pin, GPIO_MODE_OUTPUT);
+    gpio_config_t pin_cfg = {
+        .pin_bit_mask = BIT64(pin),
+        .mode = GPIO_MODE_OUTPUT,
+        .pull_up_en = false,
+        .pull_down_en = false,
+        .intr_type = GPIO_INTR_DISABLE,
+    };
+    esp_err_t err = gpio_config(&pin_cfg);
     if (err != ESP_OK)
     {
         goto error;
