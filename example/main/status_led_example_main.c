@@ -7,7 +7,12 @@ static const char TAG[] = "example";
 
 void app_main()
 {
+#if CONFIG_STATUS_LED_DEFAULT_ENABLE
     ESP_ERROR_CHECK(status_led_create_default());
+#else
+    status_led_handle_ptr STATUS_LED_DEFAULT = NULL;
+    ESP_ERROR_CHECK(status_led_create(0, 0, &STATUS_LED_DEFAULT));
+#endif
 
     assert(status_led_is_active(STATUS_LED_DEFAULT) == false);
 
