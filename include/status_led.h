@@ -3,6 +3,7 @@
 #include <driver/gpio.h>
 #include <esp_err.h>
 #include <stdbool.h>
+#include "sdkconfig.h"
 
 #ifndef STATUS_LED_DEFAULT_GPIO
 #define STATUS_LED_DEFAULT_GPIO CONFIG_STATUS_LED_DEFAULT_GPIO

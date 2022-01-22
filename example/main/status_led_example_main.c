@@ -5,7 +5,7 @@
 
 static const char TAG[] = "example";
 
-extern "C" void app_main()
+void app_main()
 {
     ESP_ERROR_CHECK(status_led_create_default());
 
