@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         # Custom Kconfig values
-        lib_example: [ 0, 1 ]
+        CONFIG_STATUS_LED_DEFAULT_ENABLE: [ n, y ]
         # ESP-IDF versions and targets
         idf_ver: [ v4.1, v4.2, v4.3, v4.4 ]
         idf_target: [ esp32, esp32s2, esp32s3, esp32c3, esp32h2 ]
@@ -47,7 +47,7 @@ jobs:
           IDF_TARGET: ${{ matrix.idf_target }}
         working-directory: example
         run: |
-          echo "LIB_EXAMPLE=${{ matrix.lib_example }}" >> sdkconfig
+          echo "CONFIG_STATUS_LED_DEFAULT_ENABLE=${{ matrix.CONFIG_STATUS_LED_DEFAULT_ENABLE }}" >> sdkconfig
 
           . ${IDF_PATH}/export.sh
           idf.py build
