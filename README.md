@@ -1,6 +1,6 @@
 # status_led
 
-[![build](https://github.com/mdvorak-iot/esp-status-led/actions/workflows/build.yml/badge.svg)](https://github.com/mdvorak-iot/esp-status-led/actions/workflows/build.yml)
+[![test](https://github.com/mdvorak-iot/esp-status-led/actions/workflows/test.yml/badge.svg)](https://github.com/mdvorak-iot/esp-status-led/actions/workflows/test.yml)
 
 TODO Description
 
